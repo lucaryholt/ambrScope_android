@@ -1,12 +1,20 @@
 package com.lucaryholt.ambrscope.Repo;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.lucaryholt.ambrscope.Model.Spot;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +60,28 @@ public class Repo {
         map.put(PRECISE, spot.isPrecise() + "");
         map.put(DESCRIPTION, spot.getDescription());
 
-        ref.set(map).addOnSuccessListener(task -> System.out.println("Spot " + spot.getId() + " saved."));
+        ref.set(map).addOnSuccessListener(task -> Log.i("RepoInfo", "Spot " + spot.getId() + " saved."));
+    }
+
+    public void uploadImage(String id, Bitmap bitmap) {
+        StorageReference ref = storage.getReference().child(id);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        InputStream is = new ByteArrayInputStream(baos.toByteArray());
+
+        ref.putStream(is).addOnSuccessListener(task -> Log.i("RepoInfo", "Image " + id + " has been uploaded."));
+    }
+
+    public void downloadBitmap(Spot spot) {
+        StorageReference ref = storage.getReference(spot.getId());
+        int max = 1024*1024*1024;
+        ref.getBytes(max).addOnSuccessListener(bytes -> {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            spot.setBitmap(bitmap);
+        }).addOnFailureListener(exception -> {
+            Log.i("RepoInfo", "Error in download " + exception);
+        });
     }
 
     public Spot getSpot(String id) {
@@ -76,6 +105,7 @@ public class Repo {
                          (String) snap.get(DESCRIPTION)
                  );
                  spots.add(spot);
+                 downloadBitmap(spot);
              }
         });
     }

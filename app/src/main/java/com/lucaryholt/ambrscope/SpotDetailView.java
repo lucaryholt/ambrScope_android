@@ -36,7 +36,7 @@ public class SpotDetailView extends AppCompatActivity {
         Spot spot = Repo.r().getSpot(id);
 
         location.setText(spot.getLatitude() + "," + spot.getLongitude());
-        // TODO set image
+        image.setImageBitmap(spot.getBitmap());
         chance.setText(spot.getChance());
         finderMethod.setText(spot.getFinderMethod());
         time.setText(spot.getTime());

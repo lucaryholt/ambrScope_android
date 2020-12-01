@@ -172,6 +172,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
+        android:onClick="cameraBtnPressen"
         android:text="@string/add_spot_camera_button"
         app:layout_constraintStart_toEndOf="@+id/addSpotImageView"
         app:layout_constraintTop_toBottomOf="@+id/addSpotLocationText" />
@@ -182,8 +183,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
+        android:onClick="galleryBtnPressed"
         android:text="@string/add_spot_gallery_button"
         app:layout_constraintStart_toEndOf="@+id/addSpotImageView"
         app:layout_constraintTop_toBottomOf="@+id/addSpotCameraButton" />
+
+    <ImageView
+        android:id="@+id/testImageView"
+        android:layout_width="80dp"
+        android:layout_height="76dp"
+        android:layout_marginStart="102dp"
+        android:layout_marginTop="96dp"
+        app:layout_constraintStart_toEndOf="@+id/addSpotPreciseRadioGroup"
+        app:layout_constraintTop_toBottomOf="@+id/addSpotFinderMethodRadioGroup"
+        app:srcCompat="@drawable/sample" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

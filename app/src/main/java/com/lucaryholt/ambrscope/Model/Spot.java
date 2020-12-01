@@ -1,5 +1,7 @@
 package com.lucaryholt.ambrscope.Model;
 
+import android.graphics.Bitmap;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -14,6 +16,7 @@ public class Spot {
     private String finderMethod;
     private boolean precise;
     private String description;
+    private Bitmap bitmap;
 
     public Spot() {
         this.id = UUID.randomUUID().toString();
@@ -117,6 +120,14 @@ public class Spot {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 
     public String toString() {

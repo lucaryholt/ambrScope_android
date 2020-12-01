@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.lucaryholt.ambrscope.LocationHandler.LocationHandler;
 import com.lucaryholt.ambrscope.Model.Spot;
@@ -64,11 +66,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        googleMap.setOnInfoWindowClickListener((Marker marker) -> {
+            Intent intent = new Intent(this, SpotDetailView.class);
+            intent.putExtra("id", marker.getSnippet());
+            startActivity(intent);
+        });
+
         ArrayList<Spot> spots = Repo.r().getSpots();
         if (spots.size() != 0) {
             //mMap.clear();
             for (Spot spot : spots) {
                 mMap.addMarker(new MarkerOptions()
+                        .snippet(spot.getId())
                         .position(new LatLng(spot.getLatitude(), spot.getLongitude()))
                         .title(spot.getDescription()));
             }

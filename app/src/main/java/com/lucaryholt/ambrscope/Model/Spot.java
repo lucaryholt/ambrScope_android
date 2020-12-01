@@ -1,5 +1,6 @@
 package com.lucaryholt.ambrscope.Model;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Spot {
@@ -17,6 +18,10 @@ public class Spot {
 
     public Spot() {
         this.id = UUID.randomUUID().toString();
+    }
+
+    public Spot(String id) {
+        this.id = id;
     }
 
     public Spot(String timeStamp, double latitude, double longitude, String pictureID, String chance, String time, String finderMethod, boolean precise, String description) {
@@ -138,5 +143,13 @@ public class Spot {
                 ", precise=" + precise +
                 ", description='" + description + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Spot spot = (Spot) o;
+        return id.equals(spot.id);
     }
 }

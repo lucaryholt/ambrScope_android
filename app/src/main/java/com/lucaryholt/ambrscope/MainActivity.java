@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         Repo.r().startListener();
 
         // TODO
-        // 1. DetailView for Spots
+        // 1. DetailView for Spots - Done!
         // 2. Decide either to have spot added at the location of device or new MapsActivity for choosing spot (with long press)
         // 3. MapsActivity with spots integrated on MainActivity
         // 4. Photo implemented - both choosing/taking and upload

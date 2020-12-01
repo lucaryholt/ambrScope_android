@@ -57,6 +57,10 @@ public class Repo {
         ref.set(map).addOnSuccessListener(task -> System.out.println("Spot " + spot.getId() + " saved."));
     }
 
+    public Spot getSpot(String id) {
+        return spots.get(spots.indexOf(new Spot(id)));
+    }
+
     public void startListener() {
         col.addSnapshotListener((values, error) -> {
              spots.clear();

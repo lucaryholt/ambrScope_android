@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">ambrScope_android</string>
+    <string name="app_name">ambrScope</string>
+    <string name="login_button">Login</string>
+    <string name="my_page_button">My Page</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="add_spot_save_button">Save</string>
+    <string name="add_spot_gallery_button">Gallery</string>
+    <string name="add_spot_camera_button">Camera</string>
 </resources>

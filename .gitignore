@@ -90,3 +90,6 @@ lint/tmp/
 /gradlew
 /gradlew.bat
 /settings.gradle
+/app/google-services.json
+/app/src/debug/
+/app/src/release/

@@ -66,8 +66,10 @@ public class Repo {
     public void uploadImage(String id, Bitmap bitmap) {
         StorageReference ref = storage.getReference().child(id);
 
+        Bitmap resized = Bitmap.createScaledBitmap(bitmap, 300, 300, false);
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        resized.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         InputStream is = new ByteArrayInputStream(baos.toByteArray());
 
         ref.putStream(is).addOnSuccessListener(task -> Log.i("RepoInfo", "Image " + id + " has been uploaded."));

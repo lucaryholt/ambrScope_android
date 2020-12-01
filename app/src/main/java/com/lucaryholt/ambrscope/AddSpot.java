@@ -123,7 +123,6 @@ public class AddSpot extends AppCompatActivity {
     private void backFromCamera(@Nullable Intent data){
         try {
             assert data != null;
-            System.out.println("here!");
             currentBitmap = (Bitmap) data.getExtras().get("data");
             imageView.setImageBitmap(currentBitmap);
         } catch (Exception e){

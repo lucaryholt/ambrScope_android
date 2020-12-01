@@ -23,7 +23,6 @@ public class Repo {
     private final String TIMESTAMP = "timestamp";
     private final String LATITUDE = "latitude";
     private final String LONGITUDE = "longitude";
-    private final String PICTUREID = "pictureID";
     private final String CHANCE = "chance";
     private final String TIME = "time";
     private final String FINDERMETHOD = "finderMethod";
@@ -47,7 +46,6 @@ public class Repo {
         map.put(TIMESTAMP, spot.getTimeStamp());
         map.put(LATITUDE, spot.getLatitude() + "");
         map.put(LONGITUDE, spot.getLongitude() + "");
-        map.put(PICTUREID, spot.getPictureID());
         map.put(CHANCE, spot.getChance());
         map.put(TIME, spot.getTime());
         map.put(FINDERMETHOD, spot.getFinderMethod());
@@ -71,7 +69,6 @@ public class Repo {
                          (String) snap.get(TIMESTAMP),
                          Double.parseDouble((String) snap.get(LATITUDE)),
                          Double.parseDouble((String) snap.get(LONGITUDE)),
-                         (String) snap.get(PICTUREID),
                          (String) snap.get(CHANCE),
                          (String) snap.get(TIME),
                          (String) snap.get(FINDERMETHOD),

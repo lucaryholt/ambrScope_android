@@ -6,4 +6,5 @@
     <string name="add_spot_save_button">Save</string>
     <string name="add_spot_gallery_button">Gallery</string>
     <string name="add_spot_camera_button">Camera</string>
+    <string name="title_activity_add_spot_maps">Map</string>
 </resources>

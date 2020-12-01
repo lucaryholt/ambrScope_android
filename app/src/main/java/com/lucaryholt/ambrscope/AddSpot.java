@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.lucaryholt.ambrscope.Enum.Chance;
 import com.lucaryholt.ambrscope.LocationHandler.LocationHandler;
@@ -20,10 +21,20 @@ import java.util.Date;
 
 public class AddSpot extends AppCompatActivity {
 
+    private TextView location;
+    private double latitude;
+    private double longitude;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_spot);
+
+        location = findViewById(R.id.addSpotLocationText);
+        latitude = getIntent().getDoubleExtra("latitude", 0);
+        longitude = getIntent().getDoubleExtra("longitude", 0);
+
+        location.setText(latitude + "," + longitude);
     }
 
     public void save(View view) {
@@ -32,14 +43,12 @@ public class AddSpot extends AppCompatActivity {
 
         newSpot.setTimeStamp(new Date().getTime() + "");
 
-        Location currentLocation = LocationHandler.getCurrentPoint();
-        newSpot.setLatitude(currentLocation.getLatitude());
-        newSpot.setLongitude(currentLocation.getLongitude());
+        newSpot.setLatitude(latitude);
+        newSpot.setLongitude(longitude);
 
         ImageView imageView = findViewById(R.id.addSpotImageView);
         Bitmap bitmap = imageView.getDrawingCache();
         // TODO send to repo and upload to storage with id
-        newSpot.setPictureID(id);
 
         RadioGroup chance = findViewById(R.id.addSpotChanceRadioGroup);
         if (chance.getCheckedRadioButtonId() != -1) {

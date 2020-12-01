@@ -9,7 +9,6 @@ public class Spot {
     private String timeStamp;
     private double latitude;
     private double longitude;
-    private String pictureID; //TODO maybe not needed
     private String chance;
     private String time;
     private String finderMethod;
@@ -24,12 +23,11 @@ public class Spot {
         this.id = id;
     }
 
-    public Spot(String timeStamp, double latitude, double longitude, String pictureID, String chance, String time, String finderMethod, boolean precise, String description) {
+    public Spot(String timeStamp, double latitude, double longitude, String chance, String time, String finderMethod, boolean precise, String description) {
         this.id = UUID.randomUUID().toString();
         this.timeStamp = timeStamp;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.pictureID = pictureID;
         this.chance = chance;
         this.time = time;
         this.finderMethod = finderMethod;
@@ -37,12 +35,11 @@ public class Spot {
         this.description = description;
     }
 
-    public Spot(String id, String timeStamp, double latitude, double longitude, String pictureID, String chance, String time, String finderMethod, boolean precise, String description) {
+    public Spot(String id, String timeStamp, double latitude, double longitude, String chance, String time, String finderMethod, boolean precise, String description) {
         this.id = id;
         this.timeStamp = timeStamp;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.pictureID = pictureID;
         this.chance = chance;
         this.time = time;
         this.finderMethod = finderMethod;
@@ -80,14 +77,6 @@ public class Spot {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
-    }
-
-    public String getPictureID() {
-        return pictureID;
-    }
-
-    public void setPictureID(String pictureID) {
-        this.pictureID = pictureID;
     }
 
     public String getChance() {
@@ -136,7 +125,6 @@ public class Spot {
                 ", timeStamp='" + timeStamp + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
-                ", picture=" + pictureID +
                 ", chance=" + chance +
                 ", time='" + time + '\'' +
                 ", finderMethod=" + finderMethod +

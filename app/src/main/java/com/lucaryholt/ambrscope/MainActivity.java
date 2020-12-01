@@ -23,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
         // 3. MapsActivity with spots integrated on MainActivity
         // 4. Photo implemented - both choosing/taking and upload
         // 5. Better solution for updating markers on map
+        // 6. Styling
+        // 7. Other marker icon, maybe small amber icon
+        // 8. App icon
     }
 
     public void test0Button(View view) {
@@ -31,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void test1Button(View view) {
-        Intent intent = new Intent(this, AddSpot.class);
+        Intent intent = new Intent(this, AddSpotMapsActivity.class);
         startActivity(intent);
     }
 }

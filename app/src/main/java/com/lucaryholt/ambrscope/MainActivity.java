@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -60,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth.getInstance().signOut();
         Repo.r().logoutEvent();
         // TODO Toast
-        login();
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     public void myPageButton(View view) {
@@ -78,6 +80,14 @@ public class MainActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 //TODO Toast
+
+                Button myPageButton = findViewById(R.id.myPageButton);
+                if(user.isAnonymous()) {
+                    myPageButton.setVisibility(View.INVISIBLE);
+                } else {
+                    myPageButton.setVisibility(View.VISIBLE);
+                }
+
                 Log.i("AuthInfo", "User " + user.getUid() + " has logged in.");
             } else {
                 Log.i("AuthInfo", "Login failed.");

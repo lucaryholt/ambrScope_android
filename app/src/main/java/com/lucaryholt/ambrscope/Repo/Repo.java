@@ -28,6 +28,7 @@ public class Repo {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference col = db.collection("spots");
 
+    private final String USERID = "userID";
     private final String TIMESTAMP = "timestamp";
     private final String LATITUDE = "latitude";
     private final String LONGITUDE = "longitude";
@@ -51,6 +52,7 @@ public class Repo {
         // Upload spot item
         DocumentReference ref = col.document(spot.getId());
         Map<String, String> map = new HashMap<>();
+        map.put(USERID, spot.getUserID());
         map.put(TIMESTAMP, spot.getTimeStamp());
         map.put(LATITUDE, spot.getLatitude() + "");
         map.put(LONGITUDE, spot.getLongitude() + "");
@@ -66,7 +68,10 @@ public class Repo {
     public void uploadImage(String id, Bitmap bitmap) {
         StorageReference ref = storage.getReference().child(id);
 
-        Bitmap resized = Bitmap.createScaledBitmap(bitmap, 300, 300, false);
+        int scale = bitmap.getHeight() / 300;
+        int width = bitmap.getWidth() / scale;
+
+        Bitmap resized = Bitmap.createScaledBitmap(bitmap, width, 300, false);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         resized.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -97,6 +102,7 @@ public class Repo {
              for(DocumentSnapshot snap : values.getDocuments()) {
                  Spot spot = new Spot(
                          snap.getId(),
+                         (String) snap.get(USERID),
                          (String) snap.get(TIMESTAMP),
                          Double.parseDouble((String) snap.get(LATITUDE)),
                          Double.parseDouble((String) snap.get(LONGITUDE)),

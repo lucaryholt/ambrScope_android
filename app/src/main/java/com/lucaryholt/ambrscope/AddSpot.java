@@ -16,6 +16,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.lucaryholt.ambrscope.Model.Spot;
 import com.lucaryholt.ambrscope.Repo.Repo;
 
@@ -48,6 +50,9 @@ public class AddSpot extends AppCompatActivity {
     public void save(View view) {
         Spot newSpot = new Spot();
         String id = newSpot.getId();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        newSpot.setUserID(user.getUid());
 
         newSpot.setTimeStamp(new Date().getTime() + "");
 

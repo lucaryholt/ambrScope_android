@@ -8,6 +8,7 @@ import java.util.UUID;
 public class Spot {
 
     private String id;
+    private String userID;
     private String timeStamp;
     private double latitude;
     private double longitude;
@@ -26,8 +27,8 @@ public class Spot {
         this.id = id;
     }
 
-    public Spot(String timeStamp, double latitude, double longitude, String chance, String time, String finderMethod, boolean precise, String description) {
-        this.id = UUID.randomUUID().toString();
+    public Spot(String userID, String timeStamp, double latitude, double longitude, String chance, String time, String finderMethod, boolean precise, String description, Bitmap bitmap) {
+        this.userID = userID;
         this.timeStamp = timeStamp;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -36,10 +37,12 @@ public class Spot {
         this.finderMethod = finderMethod;
         this.precise = precise;
         this.description = description;
+        this.bitmap = bitmap;
     }
 
-    public Spot(String id, String timeStamp, double latitude, double longitude, String chance, String time, String finderMethod, boolean precise, String description) {
+    public Spot(String id, String userID, String timeStamp, double latitude, double longitude, String chance, String time, String finderMethod, boolean precise, String description) {
         this.id = id;
+        this.userID = userID;
         this.timeStamp = timeStamp;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -56,6 +59,14 @@ public class Spot {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     public String getTimeStamp() {

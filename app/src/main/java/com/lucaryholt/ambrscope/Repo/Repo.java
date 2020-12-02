@@ -4,12 +4,20 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.lucaryholt.ambrscope.Interface.Updateable;
 import com.lucaryholt.ambrscope.Model.Spot;
 
 import java.io.ByteArrayInputStream;
@@ -18,6 +26,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Repo {
 
@@ -39,6 +48,9 @@ public class Repo {
     private final String DESCRIPTION = "description";
 
     private final ArrayList<Spot> spots = new ArrayList<>();
+    private final ArrayList<Spot> userSpots = new ArrayList<>();
+
+    private Updateable myPageUpdateable;
 
     public static Repo r() {
         return instance;
@@ -46,6 +58,14 @@ public class Repo {
 
     public ArrayList<Spot> getSpots() {
         return spots;
+    }
+
+    public ArrayList<Spot> getUserSpots() {
+        return userSpots;
+    }
+
+    public void setMyPageUpdateable(Updateable myPageUpdateable) {
+        this.myPageUpdateable = myPageUpdateable;
     }
 
     public void addSpot(Spot spot) {
@@ -69,12 +89,17 @@ public class Repo {
         StorageReference ref = storage.getReference().child(id);
 
         int scale = bitmap.getHeight() / 300;
-        int width = bitmap.getWidth() / scale;
 
-        Bitmap resized = Bitmap.createScaledBitmap(bitmap, width, 300, false);
+        Bitmap bM;
+        if(scale != 0) {
+            int width = bitmap.getWidth() / scale;
+            bM = Bitmap.createScaledBitmap(bitmap, width, 300, false);
+        } else {
+          bM = bitmap;
+        }
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        resized.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bM.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         InputStream is = new ByteArrayInputStream(baos.toByteArray());
 
         ref.putStream(is).addOnSuccessListener(task -> Log.i("RepoInfo", "Image " + id + " has been uploaded."));
@@ -115,6 +140,34 @@ public class Repo {
                  spots.add(spot);
                  downloadBitmap(spot);
              }
+        });
+    }
+
+    public void getSpotsByUser() {
+        String ids = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+
+        col.whereEqualTo(USERID, ids).addSnapshotListener((values, error) -> {
+            userSpots.clear();
+            assert values != null;
+            for(DocumentSnapshot snap : values.getDocuments()) {
+                Spot spot = new Spot(
+                        snap.getId(),
+                        (String) snap.get(USERID),
+                        (String) snap.get(TIMESTAMP),
+                        Double.parseDouble((String) snap.get(LATITUDE)),
+                        Double.parseDouble((String) snap.get(LONGITUDE)),
+                        (String) snap.get(CHANCE),
+                        (String) snap.get(TIME),
+                        (String) snap.get(FINDERMETHOD),
+                        Boolean.parseBoolean((String) snap.get(PRECISE)),
+                        (String) snap.get(DESCRIPTION)
+                );
+                userSpots.add(spot);
+                downloadBitmap(spot);
+                if(myPageUpdateable != null) {
+                    myPageUpdateable.update();
+                }
+            }
         });
     }
 

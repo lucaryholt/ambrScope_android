@@ -38,11 +38,12 @@ public class MainActivity extends AppCompatActivity {
         // 3. Photo implemented - both choosing/taking and upload - Done!
         // 4. Better solution for updating markers on map - Not needed.
         // 5. Login - Done!
-        // 6. MapsActivity with spots integrated on MainActivity
-        // 7. Toasts
-        // 8. Styling
-        // 9. Other marker icon, maybe small amber icon
-        // 10. App icon
+        // 6. My page with own added markers in a list - Done!
+        // 7. MapsActivity with spots integrated on MainActivity
+        // 8. Toasts
+        // 9. Styling
+        // 10. Other marker icon, maybe small amber icon
+        // 11. App icon
     }
 
     public void test0Button(View view) {
@@ -57,7 +58,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void logoutButton(View view) {
         FirebaseAuth.getInstance().signOut();
-        Intent intent = new Intent(this, MainActivity.class);
+        login();
+    }
+
+    public void myPageButton(View view) {
+        Intent intent = new Intent(this, MyPage.class);
         startActivity(intent);
     }
 

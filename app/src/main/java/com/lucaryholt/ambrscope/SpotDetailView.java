@@ -3,6 +3,7 @@ package com.lucaryholt.ambrscope;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,7 +37,11 @@ public class SpotDetailView extends AppCompatActivity {
         Spot spot = Repo.r().getSpot(id);
 
         location.setText(spot.getLatitude() + "," + spot.getLongitude());
-        image.setImageBitmap(spot.getBitmap());
+        if(spot.getBitmap() == null) {
+            Repo.r().downloadBitmap(spot, image);
+        } else {
+            image.setImageBitmap(spot.getBitmap());
+        }
         chance.setText(spot.getChance());
         finderMethod.setText(spot.getFinderMethod());
         time.setText(spot.getTime());

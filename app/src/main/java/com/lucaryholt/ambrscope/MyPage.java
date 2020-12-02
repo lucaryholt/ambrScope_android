@@ -6,14 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.lucaryholt.ambrscope.Adapter.SpotAdapter;
 import com.lucaryholt.ambrscope.Interface.Updateable;
-import com.lucaryholt.ambrscope.Model.Spot;
 import com.lucaryholt.ambrscope.Repo.Repo;
-
-import java.util.ArrayList;
 
 public class MyPage extends AppCompatActivity implements Updateable {
 
@@ -35,7 +30,7 @@ public class MyPage extends AppCompatActivity implements Updateable {
             startActivity(intent);
         });
 
-        Repo.r().getSpotsByUser();
+        Repo.r().startUserSpotsListener();
         Repo.r().setMyPageUpdateable(this);
     }
 

@@ -25,12 +25,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Repo.r().startListener();
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user == null) {
             login();
         }
+
+        Repo.r().startSpotsListener();
 
         // TODO
         // 1. DetailView for Spots - Done!
@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void logoutButton(View view) {
         FirebaseAuth.getInstance().signOut();
+        Repo.r().logoutEvent();
+        // TODO Toast
         login();
     }
 
@@ -75,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(resultCode == RESULT_OK) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
+                //TODO Toast
                 Log.i("AuthInfo", "User " + user.getUid() + " has logged in.");
             } else {
                 Log.i("AuthInfo", "Login failed.");

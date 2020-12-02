@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -83,12 +84,19 @@ public class AddSpot extends AppCompatActivity {
         } else newSpot.setPrecise(false);
 
         EditText description = findViewById(R.id.addSpotDescriptionEditText);
-        newSpot.setDescription(description.getText().toString());
+        String descriptionString = description.getText().toString();
 
-        Repo.r().addSpot(newSpot);
+        if(descriptionString.equals("")){
+            Log.i("AddSpotInfo", "Needs description.");
+            // TODO Toast
+        } else {
+            newSpot.setDescription(description.getText().toString());
 
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+            Repo.r().addSpot(newSpot);
+
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void galleryBtnPressed(View view){

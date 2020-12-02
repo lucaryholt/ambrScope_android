@@ -3,6 +3,7 @@ package com.lucaryholt.ambrscope.Repo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
@@ -13,6 +14,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -36,6 +38,9 @@ public class Repo {
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference col = db.collection("spots");
+
+    private ListenerRegistration spotsListener;
+    private ListenerRegistration userSpotsListener;
 
     private final String USERID = "userID";
     private final String TIMESTAMP = "timestamp";
@@ -82,7 +87,10 @@ public class Repo {
         map.put(PRECISE, spot.isPrecise() + "");
         map.put(DESCRIPTION, spot.getDescription());
 
-        ref.set(map).addOnSuccessListener(task -> Log.i("RepoInfo", "Spot " + spot.getId() + " saved."));
+        ref.set(map).addOnSuccessListener(task -> {
+            Log.i("RepoInfo", "Spot " + spot.getId() + " saved.");
+            //TODO Toast
+        });
     }
 
     public void uploadImage(String id, Bitmap bitmap) {
@@ -105,12 +113,15 @@ public class Repo {
         ref.putStream(is).addOnSuccessListener(task -> Log.i("RepoInfo", "Image " + id + " has been uploaded."));
     }
 
-    public void downloadBitmap(Spot spot) {
+    public void downloadBitmap(Spot spot, ImageView imageview) {
         StorageReference ref = storage.getReference(spot.getId());
         int max = 1024*1024*1024;
         ref.getBytes(max).addOnSuccessListener(bytes -> {
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             spot.setBitmap(bitmap);
+            if(imageview != null){
+                imageview.setImageBitmap(bitmap);
+            }
         }).addOnFailureListener(exception -> {
             Log.i("RepoInfo", "Error in download " + exception);
         });
@@ -120,8 +131,8 @@ public class Repo {
         return spots.get(spots.indexOf(new Spot(id)));
     }
 
-    public void startListener() {
-        col.addSnapshotListener((values, error) -> {
+    public void startSpotsListener() {
+        spotsListener = col.addSnapshotListener((values, error) -> {
              spots.clear();
              assert values != null;
              for(DocumentSnapshot snap : values.getDocuments()) {
@@ -138,15 +149,15 @@ public class Repo {
                          (String) snap.get(DESCRIPTION)
                  );
                  spots.add(spot);
-                 downloadBitmap(spot);
+                 downloadBitmap(spot, null);
              }
         });
     }
 
-    public void getSpotsByUser() {
+    public void startUserSpotsListener() {
         String ids = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
 
-        col.whereEqualTo(USERID, ids).addSnapshotListener((values, error) -> {
+        userSpotsListener = col.whereEqualTo(USERID, ids).addSnapshotListener((values, error) -> {
             userSpots.clear();
             assert values != null;
             for(DocumentSnapshot snap : values.getDocuments()) {
@@ -163,12 +174,22 @@ public class Repo {
                         (String) snap.get(DESCRIPTION)
                 );
                 userSpots.add(spot);
-                downloadBitmap(spot);
+                downloadBitmap(spot, null);
                 if(myPageUpdateable != null) {
                     myPageUpdateable.update();
                 }
             }
         });
+    }
+
+    public void logoutEvent() {
+        spots.clear();
+        spotsListener.remove();
+        if(userSpotsListener != null) {
+            userSpots.clear();
+            myPageUpdateable.update();
+            userSpotsListener.remove();
+        }
     }
 
 }

@@ -19,6 +19,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.lucaryholt.ambrscope.Interface.Toastable;
 import com.lucaryholt.ambrscope.Interface.Updateable;
 import com.lucaryholt.ambrscope.Model.Spot;
 
@@ -56,6 +57,7 @@ public class Repo {
     private final ArrayList<Spot> userSpots = new ArrayList<>();
 
     private Updateable myPageUpdateable;
+    private Toastable toastable;
 
     public static Repo r() {
         return instance;
@@ -71,6 +73,10 @@ public class Repo {
 
     public void setMyPageUpdateable(Updateable myPageUpdateable) {
         this.myPageUpdateable = myPageUpdateable;
+    }
+
+    public void setToastable(Toastable toastable) {
+        this.toastable = toastable;
     }
 
     public void addSpot(Spot spot) {
@@ -89,7 +95,7 @@ public class Repo {
 
         ref.set(map).addOnSuccessListener(task -> {
             Log.i("RepoInfo", "Spot " + spot.getId() + " saved.");
-            //TODO Toast
+            toastable.showToast("Spot has been saved!");
         });
     }
 

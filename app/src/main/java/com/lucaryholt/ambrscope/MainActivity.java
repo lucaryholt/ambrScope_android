@@ -7,17 +7,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.lucaryholt.ambrscope.Interface.Toastable;
 import com.lucaryholt.ambrscope.Repo.Repo;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Toastable {
 
     private final int RC_SIGN_IN = 100;
 
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
             login();
         }
 
+        Repo.r().setToastable(this);
         Repo.r().startSpotsListener();
 
         // TODO
@@ -40,11 +43,27 @@ public class MainActivity extends AppCompatActivity {
         // 4. Better solution for updating markers on map - Not needed.
         // 5. Login - Done!
         // 6. My page with own added markers in a list - Done!
-        // 7. MapsActivity with spots integrated on MainActivity
-        // 8. Toasts
+        // 7. Toasts - Done!
+        // 8. MapsActivity with spots integrated on MainActivity
         // 9. Styling
         // 10. Other marker icon, maybe small amber icon
         // 11. App icon
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        Button myPageButton = findViewById(R.id.myPageButton);
+        if(user != null) {
+            if(user.isAnonymous()) {
+                myPageButton.setVisibility(View.INVISIBLE);
+            } else {
+                myPageButton.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     public void test0Button(View view) {
@@ -60,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     public void logoutButton(View view) {
         FirebaseAuth.getInstance().signOut();
         Repo.r().logoutEvent();
-        // TODO Toast
+        showToast("Logged out!");
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
@@ -79,14 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(resultCode == RESULT_OK) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                //TODO Toast
-
-                Button myPageButton = findViewById(R.id.myPageButton);
-                if(user.isAnonymous()) {
-                    myPageButton.setVisibility(View.INVISIBLE);
-                } else {
-                    myPageButton.setVisibility(View.VISIBLE);
-                }
+                showToast("Logged in!");
 
                 Log.i("AuthInfo", "User " + user.getUid() + " has logged in.");
             } else {
@@ -109,5 +121,10 @@ public class MainActivity extends AppCompatActivity {
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
                         .build(), RC_SIGN_IN);
+    }
+
+    @Override
+    public void showToast(String text) {
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 }

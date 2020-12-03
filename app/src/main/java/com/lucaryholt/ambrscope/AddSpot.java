@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -60,7 +61,9 @@ public class AddSpot extends AppCompatActivity {
         newSpot.setLatitude(latitude);
         newSpot.setLongitude(longitude);
 
-        Repo.r().uploadImage(id, currentBitmap);
+        if(currentBitmap != null) {
+            Repo.r().uploadImage(id, currentBitmap);
+        }
 
         RadioGroup chance = findViewById(R.id.addSpotChanceRadioGroup);
         if (chance.getCheckedRadioButtonId() != -1) {
@@ -88,7 +91,7 @@ public class AddSpot extends AppCompatActivity {
 
         if(descriptionString.equals("")){
             Log.i("AddSpotInfo", "Needs description.");
-            // TODO Toast
+            Toast.makeText(this, "Needs a description!", Toast.LENGTH_SHORT).show();
         } else {
             newSpot.setDescription(description.getText().toString());
 

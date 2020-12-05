@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 
 import com.lucaryholt.ambrscope.Adapter.SpotAdapter;
@@ -25,6 +26,7 @@ public class MyPage extends AppCompatActivity implements Updateable {
         listView.setAdapter(spotAdapter);
 
         listView.setOnItemClickListener((_listView, liniarLayout, adapterPos, arrPos) -> {
+            Log.i("MyPageInfo", "Item clicked! " + arrPos);
             Intent intent = new Intent(this, SpotDetailView.class);
             intent.putExtra("id", Repo.r().getUserSpots().get((int) arrPos).getId());
             startActivity(intent);
@@ -36,6 +38,7 @@ public class MyPage extends AppCompatActivity implements Updateable {
 
     @Override
     public void update() {
+        Log.i("MyPageInfo", "Data updated!");
         spotAdapter.notifyDataSetChanged();
     }
 }

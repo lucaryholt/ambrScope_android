@@ -63,8 +63,9 @@ public class MainActivity extends AppCompatActivity implements Toastable, OnMapR
         // 9. Convert AddSpotMapsActivity to normal activity with Maps - Done!
         // 10. Scrollable activity for detailview and addspot - Done!
         // 11. Small map on addspot and detailview - Done!
-        // 12. Show dialog box with help for various pages
-        // 13. Delete spots from mypage
+        // 12. Delete spots from mypage - Done!
+            // TODO Can't access detail view from My Page - does not register click on item
+        // 13. Show dialog box with help for various pages
         // 14. Better image quality when using camera
         // 15. Styling - logo in corner of every screen and on login screen
         // 16. Other marker icon, maybe small amber icon
@@ -164,8 +165,8 @@ public class MainActivity extends AppCompatActivity implements Toastable, OnMapR
 
     public void update() {
         spots = Repo.r().getSpots();
-        //drawMarkers();
         if(mMap != null) {
+            mMap.clear();
             if(spots.size() != 0) {
                 for (Spot spot : spots) {
                     mMap.addMarker(new MarkerOptions()

@@ -33,4 +33,6 @@
     <string name="add_spot_details_time_hint">Time of day and year</string>
     <string name="add_spot_details_description_description">A short description of the spot</string>
     <string name="add_spot_details_description_hint">Max 20 characters</string>
+    <string name="spot_row_description">Description</string>
+    <string name="spot_row_delete_button">Delete</string>
 </resources>

@@ -25,6 +25,7 @@ import com.lucaryholt.ambrscope.Model.Spot;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -136,12 +137,27 @@ public class Repo {
                 imageview.setImageBitmap(bitmap);
             }
         }).addOnFailureListener(exception -> {
-            Log.i("RepoInfo", "Error in download " + exception);
+            Log.i("RepoInfo", "Error in download. Id: " + spot.getId());
         });
     }
 
     public Spot getSpot(String id) {
-        return spots.get(spots.indexOf(new Spot(id)));
+        try {
+            return spots.get(spots.indexOf(new Spot(id)));
+        } catch (ArrayIndexOutOfBoundsException e) {
+            Log.i("RepoInfo", "Could not get spot. Probably deleted. Id: " + id);
+            return null;
+        }
+    }
+
+    public void deleteSpot(String id) {
+        col.document(id).delete();
+
+        storage.getReference().child(id).delete();
+
+        myPageUpdateable.update();
+
+        toastable.showToast("Spot deleted");
     }
 
     public void startSpotsListener() {
@@ -189,9 +205,9 @@ public class Repo {
                 );
                 userSpots.add(spot);
                 downloadBitmap(spot, null);
-                if(myPageUpdateable != null) {
-                    myPageUpdateable.update();
-                }
+            }
+            if(myPageUpdateable != null) {
+                myPageUpdateable.update();
             }
         });
     }

@@ -2,7 +2,9 @@ package com.lucaryholt.ambrscope;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,7 +23,6 @@ public class SpotDetailView extends AppCompatActivity implements OnMapReadyCallb
 
     private GoogleMap mMap;
 
-    private TextView location;
     private ImageView image;
     private TextView chance;
     private TextView finderMethod;
@@ -44,26 +45,28 @@ public class SpotDetailView extends AppCompatActivity implements OnMapReadyCallb
         time = findViewById(R.id.spotDetailViewTimeValueTextView);
         precise = findViewById(R.id.spotDetailViewPreciseValueTextView);
 
-        //location = findViewById(R.id.spotDetailViewLocationTextView);
-
         String id = getIntent().getStringExtra("id");
         Spot spot = Repo.r().getSpot(id);
 
-        //location.setText(spot.getLatitude() + "," + spot.getLongitude());
-
-        latitude = spot.getLatitude();
-        longitude = spot.getLongitude();
-
-        if(spot.getBitmap() == null) {
-            Repo.r().downloadBitmap(spot, image);
+        if(spot == null) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         } else {
-            image.setImageBitmap(spot.getBitmap());
+            latitude = spot.getLatitude();
+            longitude = spot.getLongitude();
+
+            if(spot.getBitmap() == null) {
+                Repo.r().downloadBitmap(spot, image);
+            } else {
+                image.setImageBitmap(spot.getBitmap());
+            }
+            chance.setText(spot.getChance());
+            finderMethod.setText(spot.getFinderMethod());
+            time.setText(spot.getTime());
+            precise.setText(spot.isPrecise() + "");
+            description.setText(spot.getDescription());
+
         }
-        chance.setText(spot.getChance());
-        finderMethod.setText(spot.getFinderMethod());
-        time.setText(spot.getTime());
-        precise.setText(spot.isPrecise() + "");
-        description.setText(spot.getDescription());
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);

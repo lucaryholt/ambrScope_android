@@ -11,17 +11,31 @@ import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.lucaryholt.ambrscope.Interface.Toastable;
+import com.lucaryholt.ambrscope.Interface.Updateable;
+import com.lucaryholt.ambrscope.Model.Spot;
 import com.lucaryholt.ambrscope.Repo.Repo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements Toastable {
+public class MainActivity extends AppCompatActivity implements Toastable, OnMapReadyCallback, Updateable {
 
     private final int RC_SIGN_IN = 100;
+    private GoogleMap mMap;
+
+    private ArrayList<Spot> spots = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements Toastable {
         }
 
         Repo.r().setToastable(this);
+        Repo.r().setMainUpdateable(this);
         Repo.r().startSpotsListener();
 
         // TODO
@@ -44,10 +59,19 @@ public class MainActivity extends AppCompatActivity implements Toastable {
         // 5. Login - Done!
         // 6. My page with own added markers in a list - Done!
         // 7. Toasts - Done!
-        // 8. MapsActivity with spots integrated on MainActivity
-        // 9. Styling
-        // 10. Other marker icon, maybe small amber icon
-        // 11. App icon
+        // 8. MapsActivity with spots integrated on MainActivity - Done!
+        // 9. Convert AddSpotMapsActivity to normal activity with Maps - Done!
+        // 10. Scrollable activity for detailview and addspot - Done!
+        // 11. Small map on addspot and detailview - Done!
+        // 12. Show dialog box with help for various pages
+        // 13. Delete spots from mypage
+        // 14. Better image quality when using camera
+        // 15. Styling - logo in corner of every screen and on login screen
+        // 16. Other marker icon, maybe small amber icon
+        // 17. App icon
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     @Override
@@ -66,13 +90,8 @@ public class MainActivity extends AppCompatActivity implements Toastable {
         }
     }
 
-    public void test0Button(View view) {
-        Intent intent = new Intent(this, MapsActivity.class);
-        startActivity(intent);
-    }
-
-    public void test1Button(View view) {
-        Intent intent = new Intent(this, AddSpotMapsActivity.class);
+    public void addSpotButton(View view) {
+        Intent intent = new Intent(this, AddSpotSelect.class);
         startActivity(intent);
     }
 
@@ -126,5 +145,35 @@ public class MainActivity extends AppCompatActivity implements Toastable {
     @Override
     public void showToast(String text) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        googleMap.setOnInfoWindowClickListener((Marker marker) -> {
+            Intent intent = new Intent(this, SpotDetailView.class);
+            intent.putExtra("id", marker.getSnippet());
+            startActivity(intent);
+        });
+
+        update();
+
+        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(new LatLng(56.085556, 10.8746833), 6.5f)));
+    }
+
+    public void update() {
+        spots = Repo.r().getSpots();
+        //drawMarkers();
+        if(mMap != null) {
+            if(spots.size() != 0) {
+                for (Spot spot : spots) {
+                    mMap.addMarker(new MarkerOptions()
+                            .snippet(spot.getId())
+                            .position(new LatLng(spot.getLatitude(), spot.getLongitude()))
+                            .title(spot.getDescription()));
+                }
+            }
+        }
     }
 }

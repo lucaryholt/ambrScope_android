@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddSpotDetails">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/addSpotDetailsImageView"
+                    android:layout_width="199dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/spot_detail_view_image_description"
+                    app:srcCompat="@drawable/sample" />
+
+                <LinearLayout
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/addSpotDetailsCameraButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="cameraBtnPressen"
+                        android:text="@string/add_spot_camera_button" />
+
+                    <Button
+                        android:id="@+id/addSpotDetailsGalleryButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="galleryBtnPressed"
+                        android:text="@string/add_spot_gallery_button" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/addSpotDetailsChanceDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_spot_details_chance_description"
+                android:textSize="18sp" />
+
+            <RadioGroup
+                android:id="@+id/addSpotDetailsChanceRadioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="50dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addSpotImageView">
+
+                <RadioButton
+                    android:id="@+id/addSpotDetailsChanceGoodChance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:layout_gravity="start|center_horizontal"
+                    android:checked="false"
+                    android:text="@string/add_spot_details_chance_good_chance"
+                    android:textSize="15sp" />
+
+                <RadioButton
+                    android:id="@+id/addSpotDetailsMediumChance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:layout_gravity="start|center_horizontal"
+                    android:checked="false"
+                    android:text="@string/add_spot_details_chance_medium_chance"
+                    android:textSize="15sp" />
+
+                <RadioButton
+                    android:id="@+id/addSpotDetailsBadChance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:layout_gravity="start"
+                    android:checked="false"
+                    android:text="@string/add_spot_details_chance_bad_chance"
+                    android:textSize="15sp" />
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/addSpotDetailsFinderMethodDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_spot_details_finder_method_description"
+                android:textSize="18sp" />
+
+            <RadioGroup
+                android:id="@+id/addSpotDetailsFinderMethodRadioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="50dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addSpotImageView">
+
+                <RadioButton
+                    android:id="@+id/addSpotDetailsFinderMethodEyes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:layout_gravity="start|center_horizontal"
+                    android:checked="false"
+                    android:text="@string/add_spot_details_finder_method_eyes"
+                    android:textSize="15sp" />
+
+                <RadioButton
+                    android:id="@+id/addSpotDetailsFinderMethodAmberFlashlight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:layout_gravity="start|center_horizontal"
+                    android:checked="false"
+                    android:text="@string/add_spot_details_finder_method_amber_flashlight"
+                    android:textSize="15sp" />
+
+                <RadioButton
+                    android:id="@+id/addSpotDetailsFinderMethodKese"
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:layout_gravity="start|center_horizontal"
+                    android:checked="false"
+                    android:text="@string/add_spot_details_finder_method_kese"
+                    android:textSize="15sp" />
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/addSpotDetailsPreciseDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_spot_details_precise_description"
+                android:textSize="18sp" />
+
+            <RadioGroup
+                android:id="@+id/addSpotDetailsPreciseRadioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="50dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/addSpotTimeEditText">
+
+                <RadioButton
+                    android:id="@+id/addSpotDetailsPreciseYes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:layout_gravity="start|center_horizontal"
+                    android:checked="false"
+                    android:text="@string/add_spot_details_precise_precise"
+                    android:textSize="15sp"/>
+
+                <RadioButton
+                    android:id="@+id/addSpotDetailsPreciseNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
+                    android:layout_gravity="start|center_horizontal"
+                    android:checked="false"
+                    android:text="@string/add_spot_details_precise_not_precise"
+                    android:textSize="15sp"/>
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/addSpotDetailsTimeDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_spot_details_time_description"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/addSpotDetailsTimeEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/add_spot_details_time_hint"
+                android:inputType="text" />
+
+            <TextView
+                android:id="@+id/addSpotDescriptionDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_spot_details_description_description"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/addSpotDetailsDescriptionEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/add_spot_details_description_hint"
+                android:inputType="text"
+                android:maxLength="20" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                tools:context=".AddSpotDetails"
+                tools:layout_editor_absoluteX="-16dp"
+                tools:layout_editor_absoluteY="0dp" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="15dp" />
+
+            <Button
+                android:id="@+id/addSpotDetailsButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="save"
+                android:text="@string/add_spot_save_button" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

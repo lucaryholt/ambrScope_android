@@ -15,9 +15,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.lucaryholt.ambrscope.Model.Spot;
@@ -26,7 +32,9 @@ import com.lucaryholt.ambrscope.Repo.Repo;
 import java.io.InputStream;
 import java.util.Date;
 
-public class AddSpot extends AppCompatActivity {
+public class AddSpotDetails extends AppCompatActivity implements OnMapReadyCallback {
+
+    private GoogleMap mMap;
 
     private double latitude;
     private double longitude;
@@ -38,15 +46,15 @@ public class AddSpot extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_spot);
+        setContentView(R.layout.activity_add_spot_details);
 
-        TextView location = findViewById(R.id.addSpotLocationText);
         latitude = getIntent().getDoubleExtra("latitude", 0);
         longitude = getIntent().getDoubleExtra("longitude", 0);
 
-        location.setText(latitude + "," + longitude);
+        imageView = findViewById(R.id.addSpotDetailsImageView);
 
-        imageView = findViewById(R.id.addSpotImageView);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     public void save(View view) {
@@ -65,28 +73,28 @@ public class AddSpot extends AppCompatActivity {
             Repo.r().uploadImage(id, currentBitmap);
         }
 
-        RadioGroup chance = findViewById(R.id.addSpotChanceRadioGroup);
+        RadioGroup chance = findViewById(R.id.addSpotDetailsChanceRadioGroup);
         if (chance.getCheckedRadioButtonId() != -1) {
             RadioButton chanceChoice = findViewById(chance.getCheckedRadioButtonId());
             newSpot.setChance(chanceChoice.getText().toString());
         } else newSpot.setChance("Not specified.");
 
-        RadioGroup finderMethod = findViewById(R.id.addSpotFinderMethodRadioGroup);
+        RadioGroup finderMethod = findViewById(R.id.addSpotDetailsFinderMethodRadioGroup);
         if (finderMethod.getCheckedRadioButtonId() != -1) {
             RadioButton finderMethodChoice = findViewById(finderMethod.getCheckedRadioButtonId());
             newSpot.setFinderMethod(finderMethodChoice.getText().toString());
         } else newSpot.setFinderMethod("Not specified.");
 
-        EditText time = findViewById(R.id.addSpotTimeEditText);
+        EditText time = findViewById(R.id.addSpotDetailsTimeEditText);
         newSpot.setTime(time.getText().toString());
 
-        RadioGroup precise = findViewById(R.id.addSpotPreciseRadioGroup);
+        RadioGroup precise = findViewById(R.id.addSpotDetailsPreciseRadioGroup);
         if (precise.getCheckedRadioButtonId() != -1) {
             RadioButton preciseChoice = findViewById(precise.getCheckedRadioButtonId());
             newSpot.setPrecise(preciseChoice.getText().toString().equals("Precise"));
         } else newSpot.setPrecise(false);
 
-        EditText description = findViewById(R.id.addSpotDescriptionEditText);
+        EditText description = findViewById(R.id.addSpotDetailsDescriptionEditText);
         String descriptionString = description.getText().toString();
 
         if(descriptionString.equals("")){
@@ -115,7 +123,7 @@ public class AddSpot extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        imageView = findViewById(R.id.addSpotImageView);
+        imageView = findViewById(R.id.addSpotDetailsImageView);
         if(requestCode == 1){
             backFromGallery(data);
         }
@@ -144,5 +152,18 @@ public class AddSpot extends AppCompatActivity {
         } catch (Exception e){
             System.out.println(e);
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        mMap.getUiSettings().setScrollGesturesEnabled(false);
+        mMap.getUiSettings().setZoomGesturesEnabled(false);
+
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(latitude, longitude)));
+
+        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(new LatLng(latitude, longitude), 11)));
     }
 }

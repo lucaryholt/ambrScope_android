@@ -57,6 +57,7 @@ public class Repo {
     private final ArrayList<Spot> userSpots = new ArrayList<>();
 
     private Updateable myPageUpdateable;
+    private Updateable mainUpdateable;
     private Toastable toastable;
 
     public static Repo r() {
@@ -73,6 +74,10 @@ public class Repo {
 
     public void setMyPageUpdateable(Updateable myPageUpdateable) {
         this.myPageUpdateable = myPageUpdateable;
+    }
+
+    public void setMainUpdateable(Updateable mainUpdateable) {
+        this.mainUpdateable = mainUpdateable;
     }
 
     public void setToastable(Toastable toastable) {
@@ -102,12 +107,14 @@ public class Repo {
     public void uploadImage(String id, Bitmap bitmap) {
         StorageReference ref = storage.getReference().child(id);
 
-        int scale = bitmap.getHeight() / 300;
+        int desiredHeight = 1000;
+
+        int scale = bitmap.getHeight() / desiredHeight;
 
         Bitmap bM;
         if(scale != 0) {
             int width = bitmap.getWidth() / scale;
-            bM = Bitmap.createScaledBitmap(bitmap, width, 300, false);
+            bM = Bitmap.createScaledBitmap(bitmap, width, desiredHeight, false);
         } else {
           bM = bitmap;
         }
@@ -157,6 +164,7 @@ public class Repo {
                  spots.add(spot);
                  downloadBitmap(spot, null);
              }
+             mainUpdateable.update();
         });
     }
 

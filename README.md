@@ -1,4 +1,4 @@
-# ambrScope
+# ambrScope ![alt text](http://ambrscope.ryholt.net/images/icon64.png "Logo")
 
 ### Why?
 

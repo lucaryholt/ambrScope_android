@@ -65,11 +65,12 @@ public class MainActivity extends AppCompatActivity implements Toastable, OnMapR
         // 11. Small map on addspot and detailview - Done!
         // 12. Delete spots from mypage - Done!
             // TODO Can't access detail view from My Page - does not register click on item
-        // 13. Show dialog box with help for various pages
-        // 14. Better image quality when using camera
-        // 15. Styling - logo in corner of every screen and on login screen
-        // 16. Other marker icon, maybe small amber icon
-        // 17. App icon
+        // 13. Add amount of amber found and info field to spots
+        // 14. Show dialog box with help for various pages
+        // 15. Better image quality when using camera
+        // 16. Styling - logo in corner of every screen and on login screen
+        // 17. Other marker icon, maybe small amber icon
+        // 18. App icon
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);

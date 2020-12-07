@@ -10,6 +10,7 @@
     <string name="add_spot_button">Add spot</string>
     <string name="spot_detail_view_description">Description</string>
     <string name="spot_detail_view_image_description">Image of spot</string>
+    <string name="spot_detail_view_logo_description">Logo</string>
     <string name="spot_detail_view_chance">Chance:</string>
     <string name="spot_detail_view_chance_value">Chance value</string>
     <string name="spot_detail_view_finder_method">Finder method:</string>

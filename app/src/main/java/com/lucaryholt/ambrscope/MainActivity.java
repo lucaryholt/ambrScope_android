@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements Toastable, OnMapR
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
+                        .setLogo(R.drawable.icon300titleunder)
                         .build(), RC_SIGN_IN);
     }
 

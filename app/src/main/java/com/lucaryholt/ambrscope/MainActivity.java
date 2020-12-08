@@ -51,27 +51,6 @@ public class MainActivity extends AppCompatActivity implements Toastable, OnMapR
         Repo.r().setMainUpdateable(this);
         Repo.r().startSpotsListener();
 
-        // TODO
-        // 1. DetailView for Spots - Done!
-        // 2. Decide either to have spot added at the location of device or new MapsActivity for choosing spot (with long press) - Done!
-        // 3. Photo implemented - both choosing/taking and upload - Done!
-        // 4. Better solution for updating markers on map - Not needed.
-        // 5. Login - Done!
-        // 6. My page with own added markers in a list - Done!
-        // 7. Toasts - Done!
-        // 8. MapsActivity with spots integrated on MainActivity - Done!
-        // 9. Convert AddSpotMapsActivity to normal activity with Maps - Done!
-        // 10. Scrollable activity for detailview and addspot - Done!
-        // 11. Small map on addspot and detailview - Done!
-        // 12. Delete spots from mypage - Done!
-            // TODO Can't access detail view from My Page - does not register click on item
-        // 13. Add amount of amber found and info field to spots
-        // 14. Show dialog box with help for various pages
-        // 15. Better image quality when using camera
-        // 16. Styling - logo in corner of every screen and on login screen
-        // 17. Other marker icon, maybe small amber icon
-        // 18. App icon
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }

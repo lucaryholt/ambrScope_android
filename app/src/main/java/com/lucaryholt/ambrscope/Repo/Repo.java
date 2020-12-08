@@ -44,6 +44,7 @@ public class Repo {
     private ListenerRegistration spotsListener;
     private ListenerRegistration userSpotsListener;
 
+    private final String ID = "id";
     private final String USERID = "userID";
     private final String TIMESTAMP = "timestamp";
     private final String LATITUDE = "latitude";
@@ -89,6 +90,7 @@ public class Repo {
         // Upload spot item
         DocumentReference ref = col.document(spot.getId());
         Map<String, String> map = new HashMap<>();
+        map.put(ID, spot.getId());
         map.put(USERID, spot.getUserID());
         map.put(TIMESTAMP, spot.getTimeStamp());
         map.put(LATITUDE, spot.getLatitude() + "");

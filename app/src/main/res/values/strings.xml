@@ -44,4 +44,7 @@
     <string name="add_spot_details_additional_info_hint">Info</string>
     <string name="spot_row_description">Description</string>
     <string name="spot_row_delete_button">Delete</string>
+    <string name="add_spot_select_help_button">Help</string>
+    <string name="add_spot_select_help_message">Long press location on map to add spot there</string>
+    <string name="add_spot_select_help_dismiss_button">Okay</string>
 </resources>

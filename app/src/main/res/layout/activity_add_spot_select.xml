@@ -15,4 +15,15 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:context=".AddSpotSelect" />
 
+    <Button
+        android:id="@+id/addSpotSelectHelpButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        android:onClick="helpButton"
+        android:text="@string/add_spot_select_help_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

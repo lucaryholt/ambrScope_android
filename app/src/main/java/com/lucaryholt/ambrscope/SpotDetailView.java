@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,7 +11,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -29,6 +28,8 @@ public class SpotDetailView extends AppCompatActivity implements OnMapReadyCallb
     private TextView time;
     private TextView precise;
     private TextView description;
+    private TextView amount;
+    private TextView additionalInfo;
 
     private double latitude;
     private double longitude;
@@ -44,6 +45,8 @@ public class SpotDetailView extends AppCompatActivity implements OnMapReadyCallb
         finderMethod = findViewById(R.id.spotDetailViewFinderMethodValueTextView);
         time = findViewById(R.id.spotDetailViewTimeValueTextView);
         precise = findViewById(R.id.spotDetailViewPreciseValueTextView);
+        amount = findViewById(R.id.spotDetailViewAmountValueTextView);
+        additionalInfo = findViewById(R.id.spotDetailViewAdditionalInfoValueTextView);
 
         String id = getIntent().getStringExtra("id");
         Spot spot = Repo.r().getSpot(id);
@@ -65,7 +68,8 @@ public class SpotDetailView extends AppCompatActivity implements OnMapReadyCallb
             time.setText(spot.getTime());
             precise.setText(spot.isPrecise() + "");
             description.setText(spot.getDescription());
-
+            amount.setText(spot.getAmount());
+            additionalInfo.setText(spot.getAdditionalInfo());
         }
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -80,7 +84,8 @@ public class SpotDetailView extends AppCompatActivity implements OnMapReadyCallb
         mMap.getUiSettings().setZoomGesturesEnabled(false);
 
         mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(latitude, longitude)));
+                .position(new LatLng(latitude, longitude))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(new LatLng(latitude, longitude), 12)));
     }

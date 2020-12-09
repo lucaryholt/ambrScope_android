@@ -18,6 +18,8 @@ public class Spot {
     private boolean precise;
     private String description;
     private Bitmap bitmap;
+    private String amount;
+    private String additionalInfo;
 
     public Spot() {
         this.id = UUID.randomUUID().toString();
@@ -27,20 +29,7 @@ public class Spot {
         this.id = id;
     }
 
-    public Spot(String userID, String timeStamp, double latitude, double longitude, String chance, String time, String finderMethod, boolean precise, String description, Bitmap bitmap) {
-        this.userID = userID;
-        this.timeStamp = timeStamp;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.chance = chance;
-        this.time = time;
-        this.finderMethod = finderMethod;
-        this.precise = precise;
-        this.description = description;
-        this.bitmap = bitmap;
-    }
-
-    public Spot(String id, String userID, String timeStamp, double latitude, double longitude, String chance, String time, String finderMethod, boolean precise, String description) {
+    public Spot(String id, String userID, String timeStamp, double latitude, double longitude, String chance, String time, String finderMethod, boolean precise, String description, String amount, String additionalInfo) {
         this.id = id;
         this.userID = userID;
         this.timeStamp = timeStamp;
@@ -51,6 +40,8 @@ public class Spot {
         this.finderMethod = finderMethod;
         this.precise = precise;
         this.description = description;
+        this.amount = amount;
+        this.additionalInfo = additionalInfo;
     }
 
     public String getId() {
@@ -139,6 +130,22 @@ public class Spot {
 
     public void setBitmap(Bitmap bitmap) {
         this.bitmap = bitmap;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public String getAdditionalInfo() {
+        return additionalInfo;
+    }
+
+    public void setAdditionalInfo(String additionalInfo) {
+        this.additionalInfo = additionalInfo;
     }
 
     public String toString() {

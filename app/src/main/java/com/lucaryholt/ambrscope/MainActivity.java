@@ -15,6 +15,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -153,7 +154,8 @@ public class MainActivity extends AppCompatActivity implements Toastable, OnMapR
                     mMap.addMarker(new MarkerOptions()
                             .snippet(spot.getId())
                             .position(new LatLng(spot.getLatitude(), spot.getLongitude()))
-                            .title(spot.getDescription()));
+                            .title(spot.getDescription())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
                 }
             }
         }

@@ -209,6 +209,37 @@
                 android:inputType="text"
                 android:maxLength="20" />
 
+            <TextView
+                android:id="@+id/addSpotDetailsAmountTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_spot_details_amount_description"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/addSpotDetailsAmountEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/add_spot_details_amount_hint"
+                android:inputType="text" />
+
+            <TextView
+                android:id="@+id/addSpotDetailsAdditionalInfoTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_spot_details_additional_info_description"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/addSpotDetailsAdditionalInfoEditText"
+                android:layout_width="match_parent"
+                android:layout_height="84dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="@string/add_spot_details_additional_info_hint"
+                android:inputType="textMultiLine" />
+
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="15dp" />

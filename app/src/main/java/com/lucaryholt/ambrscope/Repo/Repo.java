@@ -54,6 +54,8 @@ public class Repo {
     private final String FINDERMETHOD = "finderMethod";
     private final String PRECISE = "precise";
     private final String DESCRIPTION = "description";
+    private final String AMOUNT = "amount";
+    private final String ADDITIONALINFO = "additionalInfo";
 
     private final ArrayList<Spot> spots = new ArrayList<>();
     private final ArrayList<Spot> userSpots = new ArrayList<>();
@@ -100,6 +102,8 @@ public class Repo {
         map.put(FINDERMETHOD, spot.getFinderMethod());
         map.put(PRECISE, spot.isPrecise() + "");
         map.put(DESCRIPTION, spot.getDescription());
+        map.put(AMOUNT, spot.getAmount());
+        map.put(ADDITIONALINFO, spot.getAdditionalInfo());
 
         ref.set(map).addOnSuccessListener(task -> {
             Log.i("RepoInfo", "Spot " + spot.getId() + " saved.");
@@ -177,7 +181,9 @@ public class Repo {
                          (String) snap.get(TIME),
                          (String) snap.get(FINDERMETHOD),
                          Boolean.parseBoolean((String) snap.get(PRECISE)),
-                         (String) snap.get(DESCRIPTION)
+                         (String) snap.get(DESCRIPTION),
+                         (String) snap.get(AMOUNT),
+                         (String) snap.get(ADDITIONALINFO)
                  );
                  spots.add(spot);
                  downloadBitmap(spot, null);
@@ -203,7 +209,9 @@ public class Repo {
                         (String) snap.get(TIME),
                         (String) snap.get(FINDERMETHOD),
                         Boolean.parseBoolean((String) snap.get(PRECISE)),
-                        (String) snap.get(DESCRIPTION)
+                        (String) snap.get(DESCRIPTION),
+                        (String) snap.get(AMOUNT),
+                        (String) snap.get(ADDITIONALINFO)
                 );
                 userSpots.add(spot);
                 downloadBitmap(spot, null);

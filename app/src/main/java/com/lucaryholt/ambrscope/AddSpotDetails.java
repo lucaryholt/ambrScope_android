@@ -21,6 +21,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -97,6 +98,12 @@ public class AddSpotDetails extends AppCompatActivity implements OnMapReadyCallb
         EditText description = findViewById(R.id.addSpotDetailsDescriptionEditText);
         String descriptionString = description.getText().toString();
 
+        EditText amount = findViewById(R.id.addSpotDetailsAmountEditText);
+        newSpot.setAmount(amount.getText().toString());
+
+        EditText additionalInfo = findViewById(R.id.addSpotDetailsAdditionalInfoEditText);
+        newSpot.setAdditionalInfo(additionalInfo.getText().toString());
+
         if(descriptionString.equals("")){
             Log.i("AddSpotInfo", "Needs description.");
             Toast.makeText(this, "Needs a description!", Toast.LENGTH_SHORT).show();
@@ -162,7 +169,8 @@ public class AddSpotDetails extends AppCompatActivity implements OnMapReadyCallb
         mMap.getUiSettings().setZoomGesturesEnabled(false);
 
         mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(latitude, longitude)));
+                .position(new LatLng(latitude, longitude))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 
         googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.fromLatLngZoom(new LatLng(latitude, longitude), 11)));
     }

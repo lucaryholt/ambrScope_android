@@ -19,6 +19,10 @@
     <string name="spot_detail_view_time_value">Time value</string>
     <string name="spot_detail_view_precise">Precise:</string>
     <string name="spot_detail_view_precise_value">Precise value</string>
+    <string name="spot_detail_view_amount">Amount:</string>
+    <string name="spot_detail_view_amount_value">Amount value</string>
+    <string name="spot_detail_view_additional_info">Additional info:</string>
+    <string name="spot_detail_view_additional_info_value">Additional info</string>
     <string name="add_spot_details_chance_description">What is the chance of finder amber here?</string>
     <string name="add_spot_details_chance_good_chance">Good</string>
     <string name="add_spot_details_chance_medium_chance">Medium</string>
@@ -34,6 +38,10 @@
     <string name="add_spot_details_time_hint">Time of day and year</string>
     <string name="add_spot_details_description_description">A short description of the spot</string>
     <string name="add_spot_details_description_hint">Max 20 characters</string>
+    <string name="add_spot_details_amount_description">How much amber did you find?</string>
+    <string name="add_spot_details_amount_hint">Amount in grams</string>
+    <string name="add_spot_details_additional_info_description">Any additional info</string>
+    <string name="add_spot_details_additional_info_hint">Info</string>
     <string name="spot_row_description">Description</string>
     <string name="spot_row_delete_button">Delete</string>
 </resources>

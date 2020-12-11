@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -17,7 +16,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class AddSpotSelect extends AppCompatActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
+    // To have a Google Maps fragment implemented in an activity, there are some things, that must be followed.
+    // 1. Implement OnMapReadyCallback (with onMapReady(Googlemap))
+    // 2. In onCreate() you need to add this to the map (with the SupportMapFragment below)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class AddSpotSelect extends AppCompatActivity implements OnMapReadyCallba
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
     }
 
@@ -39,9 +41,7 @@ public class AddSpotSelect extends AppCompatActivity implements OnMapReadyCallba
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        mMap.setOnMapLongClickListener(latLng -> {
+        googleMap.setOnMapLongClickListener(latLng -> {
             Intent intent = new Intent(this, AddSpotDetails.class);
             intent.putExtra("latitude", latLng.latitude);
             intent.putExtra("longitude", latLng.longitude);

@@ -5,18 +5,12 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.lucaryholt.ambrscope.Interface.Toastable;
@@ -25,7 +19,6 @@ import com.lucaryholt.ambrscope.Model.Spot;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,27 +28,24 @@ import java.util.Objects;
 public class Repo {
 
     private static final Repo instance = new Repo();
-
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
-
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference col = db.collection("spots");
 
     private ListenerRegistration spotsListener;
     private ListenerRegistration userSpotsListener;
 
-    private final String ID = "id";
-    private final String USERID = "userID";
+    private final String USER_ID = "userID";
     private final String TIMESTAMP = "timestamp";
     private final String LATITUDE = "latitude";
     private final String LONGITUDE = "longitude";
     private final String CHANCE = "chance";
     private final String TIME = "time";
-    private final String FINDERMETHOD = "finderMethod";
+    private final String FINDER_METHOD = "finderMethod";
     private final String PRECISE = "precise";
     private final String DESCRIPTION = "description";
     private final String AMOUNT = "amount";
-    private final String ADDITIONALINFO = "additionalInfo";
+    private final String ADDITIONAL_INFO = "additionalInfo";
 
     private final ArrayList<Spot> spots = new ArrayList<>();
     private final ArrayList<Spot> userSpots = new ArrayList<>();
@@ -67,6 +57,8 @@ public class Repo {
     public static Repo r() {
         return instance;
     }
+
+    private Repo(){}
 
     public ArrayList<Spot> getSpots() {
         return spots;
@@ -92,18 +84,18 @@ public class Repo {
         // Upload spot item
         DocumentReference ref = col.document(spot.getId());
         Map<String, String> map = new HashMap<>();
-        map.put(ID, spot.getId());
-        map.put(USERID, spot.getUserID());
+        map.put("id", spot.getId());
+        map.put(USER_ID, spot.getUserID());
         map.put(TIMESTAMP, spot.getTimeStamp());
         map.put(LATITUDE, spot.getLatitude() + "");
         map.put(LONGITUDE, spot.getLongitude() + "");
         map.put(CHANCE, spot.getChance());
         map.put(TIME, spot.getTime());
-        map.put(FINDERMETHOD, spot.getFinderMethod());
+        map.put(FINDER_METHOD, spot.getFinderMethod());
         map.put(PRECISE, spot.isPrecise() + "");
         map.put(DESCRIPTION, spot.getDescription());
         map.put(AMOUNT, spot.getAmount());
-        map.put(ADDITIONALINFO, spot.getAdditionalInfo());
+        map.put(ADDITIONAL_INFO, spot.getAdditionalInfo());
 
         ref.set(map).addOnSuccessListener(task -> {
             Log.i("RepoInfo", "Spot " + spot.getId() + " saved.");
@@ -114,8 +106,8 @@ public class Repo {
     public void uploadImage(String id, Bitmap bitmap) {
         StorageReference ref = storage.getReference().child(id);
 
+        // As to not fill up Firebase Storage with unnecessarily large images, we scale them down here.
         int desiredHeight = 1000;
-
         int scale = bitmap.getHeight() / desiredHeight;
 
         Bitmap bM;
@@ -123,9 +115,11 @@ public class Repo {
             int width = bitmap.getWidth() / scale;
             bM = Bitmap.createScaledBitmap(bitmap, width, desiredHeight, false);
         } else {
-          bM = bitmap;
+            bM = bitmap;
         }
 
+        // Then we compress them to JPEG format using ByteArrayOutputStream and ByteArrayInputStream
+        // And use that InputStream to upload to Storage
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bM.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         InputStream is = new ByteArrayInputStream(baos.toByteArray());
@@ -134,17 +128,17 @@ public class Repo {
     }
 
     public void downloadBitmap(Spot spot, ImageView imageview) {
+        // We download images by calling getBytes with a max bytes argument on a Storage reference
         StorageReference ref = storage.getReference(spot.getId());
-        int max = 1024*1024*1024;
+        int max = 10*1024*1024;
         ref.getBytes(max).addOnSuccessListener(bytes -> {
             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             spot.setBitmap(bitmap);
+            // If we have passed an ImageView to this function we set the bitmap on that view
             if(imageview != null){
                 imageview.setImageBitmap(bitmap);
             }
-        }).addOnFailureListener(exception -> {
-            Log.i("RepoInfo", "Error in download. Id: " + spot.getId());
-        });
+        }).addOnFailureListener(exception -> Log.i("RepoInfo", "Error in download. Id: " + spot.getId()));
     }
 
     public Spot getSpot(String id) {
@@ -158,10 +152,7 @@ public class Repo {
 
     public void deleteSpot(String id) {
         col.document(id).delete();
-
         storage.getReference().child(id).delete();
-
-        myPageUpdateable.update();
 
         toastable.showToast("Spot deleted");
     }
@@ -171,20 +162,7 @@ public class Repo {
              spots.clear();
              assert values != null;
              for(DocumentSnapshot snap : values.getDocuments()) {
-                 Spot spot = new Spot(
-                         snap.getId(),
-                         (String) snap.get(USERID),
-                         (String) snap.get(TIMESTAMP),
-                         Double.parseDouble((String) snap.get(LATITUDE)),
-                         Double.parseDouble((String) snap.get(LONGITUDE)),
-                         (String) snap.get(CHANCE),
-                         (String) snap.get(TIME),
-                         (String) snap.get(FINDERMETHOD),
-                         Boolean.parseBoolean((String) snap.get(PRECISE)),
-                         (String) snap.get(DESCRIPTION),
-                         (String) snap.get(AMOUNT),
-                         (String) snap.get(ADDITIONALINFO)
-                 );
+                 Spot spot = spotFromSnap(snap);
                  spots.add(spot);
                  downloadBitmap(spot, null);
              }
@@ -195,24 +173,11 @@ public class Repo {
     public void startUserSpotsListener() {
         String ids = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
 
-        userSpotsListener = col.whereEqualTo(USERID, ids).addSnapshotListener((values, error) -> {
+        userSpotsListener = col.whereEqualTo(USER_ID, ids).addSnapshotListener((values, error) -> {
             userSpots.clear();
             assert values != null;
             for(DocumentSnapshot snap : values.getDocuments()) {
-                Spot spot = new Spot(
-                        snap.getId(),
-                        (String) snap.get(USERID),
-                        (String) snap.get(TIMESTAMP),
-                        Double.parseDouble((String) snap.get(LATITUDE)),
-                        Double.parseDouble((String) snap.get(LONGITUDE)),
-                        (String) snap.get(CHANCE),
-                        (String) snap.get(TIME),
-                        (String) snap.get(FINDERMETHOD),
-                        Boolean.parseBoolean((String) snap.get(PRECISE)),
-                        (String) snap.get(DESCRIPTION),
-                        (String) snap.get(AMOUNT),
-                        (String) snap.get(ADDITIONALINFO)
-                );
+                Spot spot = spotFromSnap(snap);
                 userSpots.add(spot);
                 downloadBitmap(spot, null);
             }
@@ -220,6 +185,23 @@ public class Repo {
                 myPageUpdateable.update();
             }
         });
+    }
+
+    private Spot spotFromSnap(DocumentSnapshot snap) {
+        return new Spot(
+                snap.getId(),
+                (String) snap.get(USER_ID),
+                (String) snap.get(TIMESTAMP),
+                Double.parseDouble((String) Objects.requireNonNull(snap.get(LATITUDE))),
+                Double.parseDouble((String) Objects.requireNonNull(snap.get(LONGITUDE))),
+                (String) snap.get(CHANCE),
+                (String) snap.get(TIME),
+                (String) snap.get(FINDER_METHOD),
+                Boolean.parseBoolean((String) snap.get(PRECISE)),
+                (String) snap.get(DESCRIPTION),
+                (String) snap.get(AMOUNT),
+                (String) snap.get(ADDITIONAL_INFO)
+        );
     }
 
     public void logoutEvent() {

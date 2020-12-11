@@ -30,29 +30,31 @@ import com.lucaryholt.ambrscope.Repo.Repo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements Toastable, OnMapReadyCallback, Updateable {
 
     private final int RC_SIGN_IN = 100;
     private GoogleMap mMap;
 
-    private ArrayList<Spot> spots = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Checks if a user is logged in, if not we start the login flow
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user == null) {
             login();
         }
 
+        // Enable the repo to show Toasts on this activity and notify for changes in Firestore
         Repo.r().setToastable(this);
         Repo.r().setMainUpdateable(this);
         Repo.r().startSpotsListener();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
     }
 
@@ -60,8 +62,8 @@ public class MainActivity extends AppCompatActivity implements Toastable, OnMapR
     protected void onResume() {
         super.onResume();
 
+        // Only show 'My Page' button to non-anonymous users
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
         Button myPageButton = findViewById(R.id.myPageButton);
         if(user != null) {
             if(user.isAnonymous()) {
@@ -78,9 +80,11 @@ public class MainActivity extends AppCompatActivity implements Toastable, OnMapR
     }
 
     public void logoutButton(View view) {
+        // Log out of firebase and stop listeners in Repo
         FirebaseAuth.getInstance().signOut();
         Repo.r().logoutEvent();
         showToast("Logged out!");
+        // Then we start this Activity again, to "relaunch" the app.
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
@@ -88,6 +92,24 @@ public class MainActivity extends AppCompatActivity implements Toastable, OnMapR
     public void myPageButton(View view) {
         Intent intent = new Intent(this, MyPage.class);
         startActivity(intent);
+    }
+
+    private void login() {
+        // We use the login UI that FirebaseAuth provides
+        // First choose which login methods to offer
+        Log.i("AuthInfo", "Not logged in.");
+        List<AuthUI.IdpConfig> providers = Arrays.asList(
+                new AuthUI.IdpConfig.EmailBuilder().build(),
+                new AuthUI.IdpConfig.AnonymousBuilder().build()
+        );
+
+        // Then we start the SignInIntent, set the methods and custom logo. We also pass a request code.
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                            .setAvailableProviders(providers)
+                            .setLogo(R.drawable.icon300titleunder)
+                            .build(), RC_SIGN_IN);
     }
 
     @Override
@@ -101,28 +123,15 @@ public class MainActivity extends AppCompatActivity implements Toastable, OnMapR
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 showToast("Logged in!");
 
+                assert user != null;
                 Log.i("AuthInfo", "User " + user.getUid() + " has logged in.");
             } else {
                 Log.i("AuthInfo", "Login failed.");
-                Log.i("AuthInfo", response.getError().getErrorCode() + "");
+                assert response != null;
+                Log.i("AuthInfo", Objects.requireNonNull(response.getError()).getErrorCode() + "");
                 login();
             }
         }
-    }
-
-    private void login() {
-        Log.i("AuthInfo", "Not logged in.");
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.AnonymousBuilder().build()
-        );
-
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .setLogo(R.drawable.icon300titleunder)
-                        .build(), RC_SIGN_IN);
     }
 
     @Override
@@ -146,7 +155,16 @@ public class MainActivity extends AppCompatActivity implements Toastable, OnMapR
     }
 
     public void update() {
-        spots = Repo.r().getSpots();
+        /*
+            This method is called when Repo gets a change from Firestore.
+            It clears the markers on the map and sets them with the new data.
+            We check if mMap is not null, as this method also gets called
+            when the activity is not in the foreground and mMap is only
+            initialised when the activity is in the foreground.
+
+            Could be more optimised - only clear the markers that were changed.
+         */
+        ArrayList<Spot> spots = Repo.r().getSpots();
         if(mMap != null) {
             mMap.clear();
             if(spots.size() != 0) {

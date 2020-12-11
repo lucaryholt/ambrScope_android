@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,20 +11,19 @@
 
         <TextView
             android:id="@+id/spotDescriptionTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="291dp"
             android:layout_height="48dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:gravity="center_vertical"
             android:text="@string/spot_row_description"
             android:textSize="24sp" />
 
-        <Button
-            android:id="@+id/spotRowDeleteButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_weight="0"
-            android:text="@string/spot_row_delete_button" />
+        <ImageView
+            android:id="@+id/spotRowTrashImageView"
+            android:layout_width="1dp"
+            android:layout_height="48dp"
+            android:layout_weight="2"
+            app:srcCompat="@drawable/trash" />
 
     </LinearLayout>
 

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.lucaryholt.ambrscope.Adapter.SpotAdapter;
 import com.lucaryholt.ambrscope.Interface.Updateable;
@@ -25,6 +26,8 @@ public class MyPage extends AppCompatActivity implements Updateable {
         spotAdapter = new SpotAdapter(this);
         listView.setAdapter(spotAdapter);
 
+        // Does not work ATM. I believe that the button on the 'spotrow',
+        // may have overwritten this clickListener.
         listView.setOnItemClickListener((_listView, liniarLayout, adapterPos, arrPos) -> {
             Log.i("MyPageInfo", "Item clicked! " + arrPos);
             Intent intent = new Intent(this, SpotDetailView.class);
@@ -39,6 +42,12 @@ public class MyPage extends AppCompatActivity implements Updateable {
     @Override
     public void update() {
         Log.i("MyPageInfo", "Data updated!");
-        spotAdapter.notifyDataSetChanged();
+        if(Repo.r().getUserSpots().size() == 0) {
+            Toast.makeText(this, "No spots.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else {
+            spotAdapter.notifyDataSetChanged();
+        }
     }
 }

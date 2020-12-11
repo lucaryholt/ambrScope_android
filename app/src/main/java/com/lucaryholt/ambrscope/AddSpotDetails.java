@@ -35,8 +35,6 @@ import java.util.Date;
 
 public class AddSpotDetails extends AppCompatActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
-
     private double latitude;
     private double longitude;
 
@@ -55,60 +53,61 @@ public class AddSpotDetails extends AppCompatActivity implements OnMapReadyCallb
         imageView = findViewById(R.id.addSpotDetailsImageView);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
     }
 
     public void save(View view) {
-        Spot newSpot = new Spot();
-        String id = newSpot.getId();
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        newSpot.setUserID(user.getUid());
-
-        newSpot.setTimeStamp(new Date().getTime() + "");
-
-        newSpot.setLatitude(latitude);
-        newSpot.setLongitude(longitude);
-
-        if(currentBitmap != null) {
-            Repo.r().uploadImage(id, currentBitmap);
-        }
-
         RadioGroup chance = findViewById(R.id.addSpotDetailsChanceRadioGroup);
+        RadioGroup finderMethod = findViewById(R.id.addSpotDetailsFinderMethodRadioGroup);
+        RadioGroup precise = findViewById(R.id.addSpotDetailsPreciseRadioGroup);
+        EditText time = findViewById(R.id.addSpotDetailsTimeEditText);
+        EditText description = findViewById(R.id.addSpotDetailsDescriptionEditText);
+        EditText amount = findViewById(R.id.addSpotDetailsAmountEditText);
+        EditText additionalInfo = findViewById(R.id.addSpotDetailsAdditionalInfoEditText);
+
+        String chanceString;
         if (chance.getCheckedRadioButtonId() != -1) {
             RadioButton chanceChoice = findViewById(chance.getCheckedRadioButtonId());
-            newSpot.setChance(chanceChoice.getText().toString());
-        } else newSpot.setChance("Not specified.");
+            chanceString = chanceChoice.getText().toString();
+        } else chanceString = "Not specified.";
 
-        RadioGroup finderMethod = findViewById(R.id.addSpotDetailsFinderMethodRadioGroup);
+        String finderMethodString;
         if (finderMethod.getCheckedRadioButtonId() != -1) {
             RadioButton finderMethodChoice = findViewById(finderMethod.getCheckedRadioButtonId());
-            newSpot.setFinderMethod(finderMethodChoice.getText().toString());
-        } else newSpot.setFinderMethod("Not specified.");
+            finderMethodString = finderMethodChoice.getText().toString();
+        } else finderMethodString = "Not specified.";
 
-        EditText time = findViewById(R.id.addSpotDetailsTimeEditText);
-        newSpot.setTime(time.getText().toString());
-
-        RadioGroup precise = findViewById(R.id.addSpotDetailsPreciseRadioGroup);
+        boolean preciseBool;
         if (precise.getCheckedRadioButtonId() != -1) {
             RadioButton preciseChoice = findViewById(precise.getCheckedRadioButtonId());
-            newSpot.setPrecise(preciseChoice.getText().toString().equals("Precise"));
-        } else newSpot.setPrecise(false);
+            preciseBool = preciseChoice.getText().toString().equals("Precise");
+        } else preciseBool = false;
 
-        EditText description = findViewById(R.id.addSpotDetailsDescriptionEditText);
-        String descriptionString = description.getText().toString();
-
-        EditText amount = findViewById(R.id.addSpotDetailsAmountEditText);
-        newSpot.setAmount(amount.getText().toString());
-
-        EditText additionalInfo = findViewById(R.id.addSpotDetailsAdditionalInfoEditText);
-        newSpot.setAdditionalInfo(additionalInfo.getText().toString());
-
-        if(descriptionString.equals("")){
+        if(description.getText().toString().equals("")){
             Log.i("AddSpotInfo", "Needs description.");
             Toast.makeText(this, "Needs a description!", Toast.LENGTH_SHORT).show();
         } else {
-            newSpot.setDescription(description.getText().toString());
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            assert user != null;
+
+            Spot newSpot = new Spot(
+                    user.getUid(),
+                    new Date().getTime() + "",
+                    latitude,
+                    longitude,
+                    chanceString,
+                    time.getText().toString(),
+                    finderMethodString,
+                    preciseBool,
+                    description.getText().toString(),
+                    amount.getText().toString(),
+                    additionalInfo.getText().toString()
+            );
+
+            if(currentBitmap != null) {
+                Repo.r().uploadImage(newSpot.getId(), currentBitmap);
+            }
 
             Repo.r().addSpot(newSpot);
 
@@ -163,12 +162,10 @@ public class AddSpotDetails extends AppCompatActivity implements OnMapReadyCallb
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        googleMap.getUiSettings().setScrollGesturesEnabled(false);
+        googleMap.getUiSettings().setZoomGesturesEnabled(false);
 
-        mMap.getUiSettings().setScrollGesturesEnabled(false);
-        mMap.getUiSettings().setZoomGesturesEnabled(false);
-
-        mMap.addMarker(new MarkerOptions()
+        googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(latitude, longitude))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 

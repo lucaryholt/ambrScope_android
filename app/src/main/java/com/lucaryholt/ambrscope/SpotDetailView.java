@@ -20,17 +20,6 @@ import com.lucaryholt.ambrscope.Repo.Repo;
 
 public class SpotDetailView extends AppCompatActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
-
-    private ImageView image;
-    private TextView chance;
-    private TextView finderMethod;
-    private TextView time;
-    private TextView precise;
-    private TextView description;
-    private TextView amount;
-    private TextView additionalInfo;
-
     private double latitude;
     private double longitude;
 
@@ -39,14 +28,14 @@ public class SpotDetailView extends AppCompatActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spot_detail_view);
 
-        description = findViewById(R.id.spotDetailViewDescriptionTextView);
-        image = findViewById(R.id.spotDetailViewImageView);
-        chance = findViewById(R.id.spotDetailViewChanceValueTextView);
-        finderMethod = findViewById(R.id.spotDetailViewFinderMethodValueTextView);
-        time = findViewById(R.id.spotDetailViewTimeValueTextView);
-        precise = findViewById(R.id.spotDetailViewPreciseValueTextView);
-        amount = findViewById(R.id.spotDetailViewAmountValueTextView);
-        additionalInfo = findViewById(R.id.spotDetailViewAdditionalInfoValueTextView);
+        TextView description = findViewById(R.id.spotDetailViewDescriptionTextView);
+        ImageView image = findViewById(R.id.spotDetailViewImageView);
+        TextView chance = findViewById(R.id.spotDetailViewChanceValueTextView);
+        TextView finderMethod = findViewById(R.id.spotDetailViewFinderMethodValueTextView);
+        TextView time = findViewById(R.id.spotDetailViewTimeValueTextView);
+        TextView precise = findViewById(R.id.spotDetailViewPreciseValueTextView);
+        TextView amount = findViewById(R.id.spotDetailViewAmountValueTextView);
+        TextView additionalInfo = findViewById(R.id.spotDetailViewAdditionalInfoValueTextView);
 
         String id = getIntent().getStringExtra("id");
         Spot spot = Repo.r().getSpot(id);
@@ -73,17 +62,16 @@ public class SpotDetailView extends AppCompatActivity implements OnMapReadyCallb
         }
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        googleMap.getUiSettings().setScrollGesturesEnabled(false);
+        googleMap.getUiSettings().setZoomGesturesEnabled(false);
 
-        mMap.getUiSettings().setScrollGesturesEnabled(false);
-        mMap.getUiSettings().setZoomGesturesEnabled(false);
-
-        mMap.addMarker(new MarkerOptions()
+        googleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(latitude, longitude))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
 

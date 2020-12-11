@@ -2,7 +2,6 @@ package com.lucaryholt.ambrscope.Model;
 
 import android.graphics.Bitmap;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public class Spot {
@@ -21,12 +20,23 @@ public class Spot {
     private String amount;
     private String additionalInfo;
 
-    public Spot() {
-        this.id = UUID.randomUUID().toString();
-    }
-
     public Spot(String id) {
         this.id = id;
+    }
+
+    public Spot(String userID, String timeStamp, double latitude, double longitude, String chance, String time, String finderMethod, boolean precise, String description, String amount, String additionalInfo) {
+        this.id = UUID.randomUUID().toString();
+        this.userID = userID;
+        this.timeStamp = timeStamp;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.chance = chance;
+        this.time = time;
+        this.finderMethod = finderMethod;
+        this.precise = precise;
+        this.description = description;
+        this.amount = amount;
+        this.additionalInfo = additionalInfo;
     }
 
     public Spot(String id, String userID, String timeStamp, double latitude, double longitude, String chance, String time, String finderMethod, boolean precise, String description, String amount, String additionalInfo) {
@@ -56,72 +66,36 @@ public class Spot {
         return userID;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
-
     public String getTimeStamp() {
         return timeStamp;
-    }
-
-    public void setTimeStamp(String timeStamp) {
-        this.timeStamp = timeStamp;
     }
 
     public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
     public double getLongitude() {
         return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
     }
 
     public String getChance() {
         return chance;
     }
 
-    public void setChance(String chance) {
-        this.chance = chance;
-    }
-
     public String getTime() {
         return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
     }
 
     public String getFinderMethod() {
         return finderMethod;
     }
 
-    public void setFinderMethod(String finderMethod) {
-        this.finderMethod = finderMethod;
-    }
-
     public boolean isPrecise() {
         return precise;
     }
 
-    public void setPrecise(boolean precise) {
-        this.precise = precise;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Bitmap getBitmap() {
@@ -136,30 +110,8 @@ public class Spot {
         return amount;
     }
 
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
-
     public String getAdditionalInfo() {
         return additionalInfo;
-    }
-
-    public void setAdditionalInfo(String additionalInfo) {
-        this.additionalInfo = additionalInfo;
-    }
-
-    public String toString() {
-        return "Spot{" +
-                "id='" + id + '\'' +
-                ", timeStamp='" + timeStamp + '\'' +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                ", chance=" + chance +
-                ", time='" + time + '\'' +
-                ", finderMethod=" + finderMethod +
-                ", precise=" + precise +
-                ", description='" + description + '\'' +
-                '}';
     }
 
     @Override

@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:contentDescription="@string/spot_detail_view_image_description"
-                app:srcCompat="@drawable/sample" />
+                app:srcCompat="@drawable/icon300" />
 
             <TextView
                 android:id="@+id/spotDetailViewDescriptionTextView"
